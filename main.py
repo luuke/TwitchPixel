@@ -4,6 +4,7 @@ import board
 import neopixel
 import websocket
 import json
+from PubSubClient import PubSubClient
 
 twitchWebsocketsUrl = 'wss://pubsub-edge.twitch.tv'
 
@@ -11,16 +12,14 @@ with open('.env', 'r') as secretsFile:
     secretsJson = json.load(secretsFile)
     accessToken = secretsJson['AccessToken']
 
-ws = websocket.create_connection(twitchWebsocketsUrl)
-msg='{"type":"LISTEN", "nonce":"1234554321", "data": {"topics": ["channel-points-channel-v1.56618017"], "auth_token": "' + accessToken + '"}}'
-ws.send(msg)
-
-print(ws.recv())
+pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
+pubsub.connect()
+print(pubsub.receive())
 
 pixels = neopixel.NeoPixel(board.D18, 10)
 
 while True:
-    rcv = ws.recv()
+    rcv = pubsub.receive()
     msg = json.loads(json.loads(rcv)["data"]["message"])
     input = msg["data"]["redemption"]["user_input"]
     input = input.split()
