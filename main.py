@@ -20,6 +20,19 @@ pixels = neopixel.NeoPixel(board.D18, 10)
 while True:
     rcv = pubsub.receive()
     msg = json.loads(rcv)
+    
+    msgType = msg["type"]
+    redemptionTitle = msg["data"]["redemption"]["reward"]["title"]
+
+    if msgType != "reward-redeemed":
+        print("Invalid message type")
+        print(msgType)
+        continue
+
+    if redemptionTitle != "[In development] Control LEDs":
+        print("Invalid redemption type")
+        continue
+
     input = msg["data"]["redemption"]["user_input"]
     input = input.split()
 
