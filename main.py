@@ -14,7 +14,6 @@ with open('.env', 'r') as secretsFile:
 
 pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
 pubsub.connect()
-print(pubsub.receive())
 
 pixels = neopixel.NeoPixel(board.D18, 10)
 
