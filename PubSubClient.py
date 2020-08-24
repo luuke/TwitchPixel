@@ -1,3 +1,4 @@
+import json
 import websocket
 
 class PubSubClient:
@@ -8,10 +9,12 @@ class PubSubClient:
         self._connection = websocket.WebSocket()
 
     def connect(self):
-        self._connection.connect(self._url)
         msg='{"type":"LISTEN", "nonce":"1234554321", "data": {"topics": ["channel-points-channel-v1.56618017"], "auth_token": "' + self._accessToken + '"}}'
+        self._connection.connect(self._url)
         self._connection.send(msg)
+        print("Connection status:" + self._connection.recv()) # TODO: Replace with connection success/fail handling
 
     def receive(self):
-        return self._connection.recv()
+        msg = self._connection.recv()
+        return json.loads(msg)["data"]["message"]
     

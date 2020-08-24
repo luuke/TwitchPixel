@@ -19,7 +19,7 @@ pixels = neopixel.NeoPixel(board.D18, 10)
 
 while True:
     rcv = pubsub.receive()
-    msg = json.loads(json.loads(rcv)["data"]["message"])
+    msg = json.loads(rcv)
     input = msg["data"]["redemption"]["user_input"]
     input = input.split()
 
