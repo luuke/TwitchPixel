@@ -7,9 +7,9 @@ import json
 
 twitchWebsocketsUrl = 'wss://pubsub-edge.twitch.tv'
 
-secretsFile = open('.env', 'r')
-secrets = secretsFile.readlines()
-accessToken = secrets[0][:-1] # :-1 to get rid of new line at the end of secret
+with open('.env', 'r') as secretsFile:
+    secretsJson = json.load(secretsFile)
+    accessToken = secretsJson['AccessToken']
 
 ws = websocket.create_connection(twitchWebsocketsUrl)
 msg='{"type":"LISTEN", "nonce":"1234554321", "data": {"topics": ["channel-points-channel-v1.56618017"], "auth_token": "' + accessToken + '"}}'
@@ -19,7 +19,6 @@ print(ws.recv())
 
 pixels = neopixel.NeoPixel(board.D18, 10)
 
-# for i in range(1):
 while True:
     rcv = ws.recv()
     msg = json.loads(json.loads(rcv)["data"]["message"])
