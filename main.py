@@ -4,6 +4,7 @@ try:
     import board
     import neopixel
     IsRaspberryPi = True
+    pixels = neopixel.NeoPixel(board.D18, 10)
     print('Application running on Raspberry Pi')
 except (ImportError, NotImplementedError):
     IsRaspberryPi = False
@@ -11,18 +12,18 @@ except (ImportError, NotImplementedError):
 
 import websocket
 import json
+import re
 from PubSubClient import PubSubClient
 
 twitchWebsocketsUrl = 'wss://pubsub-edge.twitch.tv'
 
 def setLed(r=0, g=0, b=0):
     print(r,g,b)
+    print(min(abs(r),255), min(abs(g),255), min(abs(b),255))
     
     if IsRaspberryPi == True:
-        pixels = neopixel.NeoPixel(board.D18, 10)
-        
         for j in range(9):
-            pixels[j] = (r,g,b)
+            pixels[j] = (min(abs(r),255), min(abs(g),255), min(abs(b),255))
         pixels.show()
 
 
@@ -50,7 +51,13 @@ while True:
         print("Invalid redemption type")
         continue
 
-    input = msg["data"]["redemption"]["user_input"]
-    input = input.split()
+    userInput = msg["data"]["redemption"]["user_input"]
 
-    setLed(int(input[0]),int(input[1]),int(input[2]))
+    rgb = re.search("[0-9]+ [0-9]+ [0-9]+", userInput)
+
+    if rgb is None:
+        print("Invalid user input: " + userInput)
+    else:
+        print("User input: " + userInput)
+        colors = rgb[0].split()
+        setLed(int(colors[0]),int(colors[1]),int(colors[2]))
