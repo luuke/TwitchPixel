@@ -37,7 +37,13 @@ with open('.env', 'r') as secretsFile:
 
 async def printMsg():
     while True:
-        print(await pubsub.getMsg())
+        msg = await pubsub.getMsg()
+        print(msg)
+        msg = json.loads(msg)["data"]["message"]
+        msg = json.loads(msg)["data"]["redemption"]["user_input"]
+        colors = msg.split()
+        print(colors)
+        setLed(int(colors[0]),int(colors[1]),int(colors[2]))
 
 if __name__ == "__main__":
     pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
