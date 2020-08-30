@@ -7,7 +7,6 @@ class PubSubClient:
         self._url = 'wss://pubsub-edge.twitch.tv' 
         self._topics = topics
         self._accessToken = accessToken
-        self._connection = None
 
     async def connect(self):
         msg='{"type":"LISTEN", "nonce":"1234554321", "data": {"topics": ["channel-points-channel-v1.56618017"], "auth_token": "' + self._accessToken + '"}}'
@@ -15,15 +14,12 @@ class PubSubClient:
         await self._connection.send(msg)
         print("Connection status:" + await self._connection.recv()) # TODO: Replace with connection success/fail handling
 
-    def receive(self):
-        msg = self._connection.recv()
-        return json.loads(msg)["data"]["message"]
-
-    async def test(self):
+    async def receive(self):
         while True:
             print("test")
             msg = await self._connection.recv()
             print(msg)
+            # return json.loads(msg)["data"]["message"]
 
     async def heartbeat(self):
         while True:
