@@ -38,7 +38,12 @@ with open('.env', 'r') as secretsFile:
 if __name__ == "__main__":
     pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
     asyncio.get_event_loop().run_until_complete(pubsub.connect())
-    asyncio.get_event_loop().run_until_complete(pubsub.test())
+    
+    tasks = [
+        asyncio.ensure_future(pubsub.test()),
+        asyncio.ensure_future(pubsub.heartbeat())
+    ]
+    asyncio.get_event_loop().run_until_complete(asyncio.wait(tasks))
 
 # while True:
 
