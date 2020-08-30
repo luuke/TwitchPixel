@@ -10,7 +10,8 @@ except (ImportError, NotImplementedError):
     IsRaspberryPi = False
     print('Application running on PC')
 
-import websocket
+import asyncio
+# import websocket
 import json
 import re
 from PubSubClient import PubSubClient
@@ -31,33 +32,41 @@ with open('.env', 'r') as secretsFile:
     secretsJson = json.load(secretsFile)
     accessToken = secretsJson['AccessToken']
 
-pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
-pubsub.connect()
+# pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
+# pubsub.connect()
 
+if __name__ == "__main__":
+    pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
+    asyncio.get_event_loop().run_until_complete(pubsub.connect())
+    asyncio.get_event_loop().run_until_complete(pubsub.test())
 
-while True:
-    rcv = pubsub.receive()
-    msg = json.loads(rcv)
+# while True:
+
     
-    msgType = msg["type"]
-    redemptionTitle = msg["data"]["redemption"]["reward"]["title"]
+#     rcv = pubsub.receive()
+#     pubsub.heartbeat()
 
-    if msgType != "reward-redeemed":
-        print("Invalid message type")
-        print(msgType)
-        continue
+#     msg = json.loads(rcv)
+    
+#     msgType = msg["type"]
+#     redemptionTitle = msg["data"]["redemption"]["reward"]["title"]
 
-    if redemptionTitle != "[In development] Control LEDs":
-        print("Invalid redemption type")
-        continue
+#     if msgType != "reward-redeemed":
+#         print("Invalid message type")
+#         print(msgType)
+#         continue
 
-    userInput = msg["data"]["redemption"]["user_input"]
+#     if redemptionTitle != "[In development] Control LEDs":
+#         print("Invalid redemption type")
+#         continue
 
-    rgb = re.search("[0-9]+ [0-9]+ [0-9]+", userInput)
+#     userInput = msg["data"]["redemption"]["user_input"]
 
-    if rgb is None:
-        print("Invalid user input: " + userInput)
-    else:
-        print("User input: " + userInput)
-        colors = rgb[0].split()
-        setLed(int(colors[0]),int(colors[1]),int(colors[2]))
+#     rgb = re.search("[0-9]+ [0-9]+ [0-9]+", userInput)
+
+#     if rgb is None:
+#         print("Invalid user input: " + userInput)
+#     else:
+#         print("User input: " + userInput)
+#         colors = rgb[0].split()
+#         setLed(int(colors[0]),int(colors[1]),int(colors[2]))
