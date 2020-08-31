@@ -31,7 +31,7 @@ class PubSubClient:
                 print("Open")
             await asyncio.sleep(5)
 
-    async def getMsg(self):
+    async def getNextMessage(self):
         while True:
             try:
                 return self._messages.get_nowait()

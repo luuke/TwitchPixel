@@ -37,7 +37,7 @@ with open('.env', 'r') as secretsFile:
 
 async def main():
     while True:
-        msg = await pubsub.getMsg()
+        msg = await pubsub.getNextMessage()
         print(msg)
         msg = json.loads(msg)["data"]["message"]
         msg = json.loads(msg)["data"]["redemption"]["user_input"]
