@@ -18,22 +18,22 @@ class PubSubClient:
 
     async def receive(self):
         while True:
-            print("test")
+            print("receive()")
             msg = await self._connection.recv()
             self._messages.put(msg)
-            # print(msg)
-            # return json.loads(msg)["data"]["message"]
 
     async def heartbeat(self):
         while True:
-            print("heartbeat")
+            print("heartbeat()")
             if self._connection.open:
-                print("Open")
+                print("heartbeat(): Connection opened")
             await asyncio.sleep(5)
 
     async def getNextMessage(self):
         while True:
             try:
+                print("getNextMessage()")
                 return self._messages.get_nowait()
             except queue.Empty:
+                print("getNextMessage(): sleep")
                 await asyncio.sleep(1)    
