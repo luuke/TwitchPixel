@@ -31,11 +31,14 @@ async def main():
     while True:
         msg = await pubsub.getNextMessage()
         print("main(): " + msg)
-        msg = json.loads(msg)["data"]["message"]
-        msg = json.loads(msg)["data"]["redemption"]["user_input"]
-        colors = msg.split()
-        print("main(): " + str(colors))
-        setLed(int(colors[0]),int(colors[1]),int(colors[2]))
+        try:
+            msg = json.loads(msg)["data"]["message"]
+            msg = json.loads(msg)["data"]["redemption"]["user_input"]
+            colors = msg.split()
+            print("main(): " + str(colors))
+            setLed(int(colors[0]),int(colors[1]),int(colors[2]))
+        except:
+            print("Not colors message!")
 
 if __name__ == "__main__":
     pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
