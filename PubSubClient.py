@@ -24,9 +24,11 @@ class PubSubClient:
 
     async def heartbeat(self):
         while True:
+            msg='{"type":"PING"}'
             print("heartbeat()")
             if self._connection.open:
                 print("heartbeat(): Connection opened")
+                await self._connection.send(msg)
             await asyncio.sleep(5)
 
     async def getNextMessage(self):
