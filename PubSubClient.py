@@ -29,7 +29,7 @@ class PubSubClient:
             if self._connection.open:
                 print("heartbeat(): Connection opened")
                 await self._connection.send(msg)
-            await asyncio.sleep(5)
+            await asyncio.sleep(60)
 
     async def getNextMessage(self):
         while True:
