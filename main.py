@@ -20,7 +20,7 @@ twitchWebsocketsUrl = 'wss://pubsub-edge.twitch.tv'
 ledStrip = LedStrip(10)
 
 def setLed(r=0, g=0, b=0):
-    print("Setting RGB: " + r,g,b)
+    print("Setting RGB: {} {} {}".format(r,g,b))
     ledStrip.setColor((r,g,b))
 
 with open('.env', 'r') as secretsFile:
