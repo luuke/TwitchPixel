@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 
 class MessageType(Enum):
@@ -9,3 +10,9 @@ class MessageType(Enum):
 class Message:
     def __init__(self, type: MessageType):
         self.type = type
+
+class PubSubParser:
+    @staticmethod
+    def parse(msg: str):
+        msg = json.loads(msg)
+        print("parse():", msg)
