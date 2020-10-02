@@ -15,6 +15,7 @@ import json
 import re
 from LedStrip import LedStrip
 from PubSubClient import PubSubClient
+from PubSubParser import PubSubParser
 
 twitchWebsocketsUrl = 'wss://pubsub-edge.twitch.tv'
 ledStrip = LedStrip(10)
@@ -32,6 +33,7 @@ async def main():
         msg = await pubsub.getNextMessage()
         print("main(): " + msg)
         try:
+            parsedMsg = PubSubParser.parse(msg)
             msg = json.loads(msg)["data"]["message"]
             msg = json.loads(msg)["data"]["redemption"]["user_input"]
             colors = msg.split()
