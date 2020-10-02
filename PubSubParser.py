@@ -23,4 +23,8 @@ class PubSubParser:
 
         if "type" in msg._dict:
             msg.Type = msg._dict["type"]
+            if((msg.Type == "PONG") or 
+               (msg.Type == "RECONNECT")):
+                return msg
+
 
