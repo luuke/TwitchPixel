@@ -6,3 +6,6 @@ class MessageType(Enum):
     MESSAGE = 2
     MESSAGE_REWARD_REDEEMED = 3
 
+class Message:
+    def __init__(self, type: MessageType):
+        self.type = type
