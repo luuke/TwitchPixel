@@ -37,8 +37,8 @@ async def main():
             colors = msg.split()
             print("main(): " + str(colors))
             setLed(int(colors[0]),int(colors[1]),int(colors[2]))
-        except:
-            print("Not colors message!")
+        except Exception as e:
+            print("Exception:", e)
 
 if __name__ == "__main__":
     pubsub = PubSubClient(accessToken, ["channel-points-channel-v1.56618017"])
